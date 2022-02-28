@@ -63,9 +63,10 @@
 \setlength{\cvsidebarwidth}{\dimexpr\textwidth-\cvsidebargap-\cvbodywidth-2\fboxsep\relax}
 \setlength{\cvfooterheight}{\dimexpr11pt\relax}
 \setlength{\cvfootergap}{0pt}
-\setlength{\cvbodyheight}{\dimexpr\textheight-4\fboxsep-\cvfootergap-\cvfooterheight-2\fboxrule\relax}
+\setlength{\cvbodyheight}{\dimexpr\textheight-4\fboxsep-\cvfootergap-\cvfooterheight\relax}
 \setlength{\topskip}{0pt}
-
+\newlength{\somenamehere}
+\settoheight{\somenamehere}{\hbox{\small Thorn Staudingerstraße}}
 %%% New Commands
 \newcommand*{\currentwidth}{\dimexpr\linewidth-2\fboxsep\relax}
 \newcommand*{\cvheader}[2][CV]{
@@ -81,7 +82,8 @@
 }
 \newcommand*{\cvfooter}[3]{
     \par%
-    \vspace*{\dimexpr\cvfootergap-2\fboxrule\relax}%
+    \nointerlineskip%
+    \vspace*{\dimexpr\cvfootergap\relax}%
     \noindent%
     %\begin{minipage}[t][\cvfooterheight][t]{\dimexpr\cvbodywidth+\cvsidebargap+\cvsidebarwidth\relax}
         \colorbox{lightboxbgcolor}{%
@@ -140,7 +142,8 @@
     \Huge\the\baselineskip\\
     \huge\the\baselineskip\\
     \small\the\baselineskip\\
-    \normalsize\the\fboxrule%
+    \normalsize\the\fboxrule\\
+    \the\somenamehere
 \end{cvsidebar}%
 \cvfooter{Thorn Thaler}{Staudingerstraße 38}{22607 Hamburg}
 \end{document}
