@@ -1,0 +1,146 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}		
+\usepackage[english]{babel}
+\usepackage[default]{gillius2}
+\usepackage{moresize}
+\usepackage{xcolor}
+\usepackage{etoolbox}
+% \usepackage{worldflags}
+% \usepackage{xifthen}
+
+
+
+% \usepackage{fontawesome5}
+% \usepackage[hidelinks]{hyperref}
+% \usepackage{transparent}
+
+% \usepackage{bm}
+% \usepackage{graphicx}
+% \usepackage{wrapfig}
+% \usepackage{float}
+% \usepackage{multicol}			
+% \usepackage{multirow}
+% \usepackage{array}
+\usepackage[a4paper,margin=5pt]{geometry}
+
+\pagestyle{empty}
+
+%%% Fonts
+%\renewcommand*\familydefault{\sfdefault} 
+%%% Colors
+\definecolor{darkboxbgcolor}{HTML}{303E4C}
+\definecolor{darkboxfgcolor}{HTML}{FFFFFF}
+
+\definecolor{lightboxbgcolor}{HTML}{BAC7CE}
+\definecolor{lightboxfgcolor}{HTML}{FFFFFF}
+
+\definecolor{bgcolor}{HTML}{FFFFFF}
+\definecolor{fgcolor}{HTML}{000000}
+
+\definecolor{accent}{HTML}{F9A620}
+
+\pagecolor{bgcolor}
+
+%%% Debug
+%%\showoutput
+%%\showboxdepth=4
+
+\newbool{isleft}
+\setbool{isleft}{true}
+
+%%% Lengths
+\newlength{\cvbodywidth}
+\newlength{\cvsidebargap}
+\newlength{\cvsidebarwidth}
+\newlength{\cvbodyheight}
+\newlength{\cvfootergap}
+\newlength{\cvfooterheight}
+
+\setlength{\cvbodywidth}{0.75\textwidth}
+\setlength{\cvsidebargap}{5pt}
+\setlength{\cvsidebarwidth}{\dimexpr\textwidth-\cvsidebargap-\cvbodywidth-2\fboxsep\relax}
+\setlength{\cvfooterheight}{\dimexpr11pt\relax}
+\setlength{\cvfootergap}{0pt}
+\setlength{\cvbodyheight}{\dimexpr\textheight-4\fboxsep-\cvfootergap-\cvfooterheight-2\fboxrule\relax}
+\setlength{\topskip}{0pt}
+
+%%% New Commands
+\newcommand*{\currentwidth}{\dimexpr\linewidth-2\fboxsep\relax}
+\newcommand*{\cvheader}[2][CV]{
+    \vspace{-\fboxsep}%
+	\colorbox{darkboxbgcolor}{%
+        \HUGE%
+        \makebox(\currentwidth,\baselineskip){%
+            \color{darkboxfgcolor}%
+            \uppercase{#2}
+            \textbullet\ 
+            \uppercase{#1}}%
+    }%
+}
+\newcommand*{\cvfooter}[3]{
+    \par%
+    \vspace*{\dimexpr\cvfootergap-2\fboxrule\relax}%
+    \noindent%
+    %\begin{minipage}[t][\cvfooterheight][t]{\dimexpr\cvbodywidth+\cvsidebargap+\cvsidebarwidth\relax}
+        \colorbox{lightboxbgcolor}{%
+        \small%
+        \makebox(\currentwidth,\cvfooterheight){%
+            \color{lightboxfgcolor}%
+            #1 \textbullet\
+            #2 \textbullet\
+            #3%
+        }%
+    }%
+}
+
+\newsavebox{\sidebarbox}
+\newenvironment*{cvsidebar}{%
+    \noindent%
+    \begin{lrbox}{\sidebarbox}%
+        \begin{minipage}[t][\cvbodyheight][t]{\cvsidebarwidth}%
+            \vspace{0pt}% need this to ensure minipages align c.f. https://bit.ly/3pioFT7
+            \color{darkboxfgcolor}%
+}{%
+        \end{minipage}%
+    \end{lrbox}%
+    \colorbox{darkboxbgcolor}{%
+        \usebox{\sidebarbox}%
+    }%
+    \ifbool{isleft}{%
+        \hspace*{\cvsidebargap}%
+        \global\setbool{isleft}{false}%
+    }{%
+        \global\setbool{isleft}{true}%
+    }%
+    \ignorespacesafterend%
+}
+
+\newenvironment*{cvbody}{%
+\ignorespaces\noindent%
+\begin{minipage}[t][\cvbodyheight][t]{\cvbodywidth}%
+}{%
+\end{minipage}%
+\ifbool{isleft}{%
+    \hspace*{\cvsidebargap}%
+    \global\setbool{isleft}{false}%
+}{%
+    \global\setbool{isleft}{true}%
+}%
+\ignorespacesafterend}
+
+%%% hooks
+\begin{document}
+\begin{cvbody}
+    \cvheader{Thorn Thaler}
+\end{cvbody}
+\begin{cvsidebar}
+    \HUGE\the\baselineskip\\
+    \Huge\the\baselineskip\\
+    \huge\the\baselineskip\\
+    \small\the\baselineskip\\
+    \normalsize\the\fboxrule%
+\end{cvsidebar}%
+\cvfooter{Thorn Thaler}{Staudingerstraße 38}{22607 Hamburg}
+\end{document}
