@@ -8,8 +8,7 @@
 \usepackage{xcolor}
 \usepackage{etoolbox}
 % \usepackage{worldflags}
-% \usepackage{xifthen}
-
+\usepackage{tikz}
 
 
 % \usepackage{fontawesome5}
@@ -58,16 +57,52 @@
 \newlength{\cvfootergap}
 \newlength{\cvfooterheight}
 
-\setlength{\cvbodywidth}{0.75\textwidth}
-\setlength{\cvsidebargap}{5pt}
-\setlength{\cvsidebarwidth}{\dimexpr\textwidth-\cvsidebargap-\cvbodywidth-2\fboxsep\relax}
-\setlength{\cvfooterheight}{\dimexpr11pt\relax}
-\setlength{\cvfootergap}{0pt}
-\setlength{\cvbodyheight}{\dimexpr\textheight-4\fboxsep-\cvfootergap-\cvfooterheight\relax}
-\setlength{\topskip}{0pt}
-\newlength{\somenamehere}
-\settoheight{\somenamehere}{\hbox{\small Thorn Staudingerstraße}}
+\deflength{\cvbodywidth}{0.75\textwidth}
+\deflength{\cvsidebargap}{5pt}
+\deflength{\cvsidebarwidth}{\dimexpr\textwidth-\cvsidebargap-\cvbodywidth-2\fboxsep\relax}
+{
+    \small%
+    \global\deflength{\cvfooterheight}{\baselineskip}
+}
+
+\deflength{\cvfootergap}{0pt}
+\deflength{\cvbodyheight}{\dimexpr\textheight-4\fboxsep-\cvfootergap-\cvfooterheight\relax}
+\deflength{\topskip}{0pt}
+\deflength{\parindent}{0pt}
+
 %%% New Commands
+\newcounter{ii}
+
+\newcommand*{\arrow}[2][left]{
+    \begin{tikzpicture}[scale=0.58]
+        \ifstrequal{#1}{left}{%
+            \filldraw[fill=#2,draw=#2] (0,0) -- (0.2,0) -- (0.3,0.2) -- (0.2,0.4) -- (0,0.4) -- (0.1,0.2) -- cycle;%
+        }{%
+            \filldraw[fill=#2,draw=#2] (0,0.2) -- (0.1,0) -- (0.3,0) -- (0.2,0.2) -- (0.3,0.4) -- (0.1,0.4) -- cycle;
+        }%
+    \end{tikzpicture}
+}
+
+\newcommand*{\narrow}[3][left]{
+    \makeatletter
+    \defcounter{ii}{0}
+    \@whilenum\value{ii}<#2\do{%
+        \stepcounter{ii}%
+        \arrow[#1]{#3}%
+        \hspace{-6pt}%\ifthenelse{\value{ii}=#2}{}{\hspace{-6pt}}%
+    }%
+    \makeatother%
+}
+
+\newcommand*{\doublearrow}[2][left]{
+    \narrow[#1]{2}{#2}%
+}
+
+\newcommand*{\tripplearrow}[2][left]{
+    \narrow[#1]{3}{#2}%
+}
+
+
 \newcommand*{\currentwidth}{\dimexpr\linewidth-2\fboxsep\relax}
 \newcommand*{\cvheader}[2][CV]{
     \vspace{-\fboxsep}%
@@ -83,10 +118,9 @@
 \newcommand*{\cvfooter}[3]{
     \par%
     \nointerlineskip%
-    \vspace*{\dimexpr\cvfootergap\relax}%
-    \noindent%
-    %\begin{minipage}[t][\cvfooterheight][t]{\dimexpr\cvbodywidth+\cvsidebargap+\cvsidebarwidth\relax}
-        \colorbox{lightboxbgcolor}{%
+    \vspace*{\cvfootergap}%
+    
+    \colorbox{lightboxbgcolor}{%
         \small%
         \makebox(\currentwidth,\cvfooterheight){%
             \color{lightboxfgcolor}%
@@ -97,9 +131,26 @@
     }%
 }
 
+\newcommand*{\cvbodysection}[2][]{
+    \par%
+    
+    \colorbox{darkboxbgcolor}{%
+        \makebox(\currentwidth,\baselineskip)[l]{%
+            \color{darkboxfgcolor}%
+            \ifblank{#1}{}{#1\ }%
+            \textbf{%
+                \uppercase{#2}%
+            }%
+        }%
+    }%
+}
+
+\newcommand*{\cvquote}[1]{
+
+}
+
 \newsavebox{\sidebarbox}
 \newenvironment*{cvsidebar}{%
-    \noindent%
     \begin{lrbox}{\sidebarbox}%
         \begin{minipage}[t][\cvbodyheight][t]{\cvsidebarwidth}%
             \vspace{0pt}% need this to ensure minipages align c.f. https://bit.ly/3pioFT7
@@ -120,30 +171,30 @@
 }
 
 \newenvironment*{cvbody}{%
-\ignorespaces\noindent%
-\begin{minipage}[t][\cvbodyheight][t]{\cvbodywidth}%
+    \ignorespaces%
+    \begin{minipage}[t][\cvbodyheight][t]{\cvbodywidth}%
 }{%
-\end{minipage}%
-\ifbool{isleft}{%
-    \hspace*{\cvsidebargap}%
-    \global\setbool{isleft}{false}%
-}{%
-    \global\setbool{isleft}{true}%
-}%
-\ignorespacesafterend}
+    \end{minipage}%
+    \ifbool{isleft}{%
+        \hspace*{\cvsidebargap}%
+        \global\setbool{isleft}{false}%
+    }{%
+        \global\setbool{isleft}{true}%
+    }%
+    \ignorespacesafterend%
+}
 
 %%% hooks
+
 \begin{document}
 \begin{cvbody}
-    \cvheader{Thorn Thaler}
+    \cvheader{Thorn Thaler}%
+
+    %\cvbodysection[\doublearrow{white}]{a}%
+
+    \cvbodysection[\textbullet]{b}%
 \end{cvbody}
 \begin{cvsidebar}
-    \HUGE\the\baselineskip\\
-    \Huge\the\baselineskip\\
-    \huge\the\baselineskip\\
-    \small\the\baselineskip\\
-    \normalsize\the\fboxrule\\
-    \the\somenamehere
 \end{cvsidebar}%
 \cvfooter{Thorn Thaler}{Staudingerstraße 38}{22607 Hamburg}
 \end{document}
