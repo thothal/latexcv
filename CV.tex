@@ -7,11 +7,9 @@
 \usepackage{moresize}
 \usepackage{xcolor}
 \usepackage{etoolbox}
-% \usepackage{worldflags}
 \usepackage{tikz}
-
-
-% \usepackage{fontawesome5}
+\usepackage{tabularx}
+\usepackage{fontawesome5}
 % \usepackage[hidelinks]{hyperref}
 % \usepackage{transparent}
 
@@ -22,7 +20,7 @@
 % \usepackage{multicol}			
 % \usepackage{multirow}
 % \usepackage{array}
-\usepackage[a4paper,margin=5pt]{geometry}
+\usepackage[a4paper,vmargin=0pt,hmargin=5pt]{geometry}
 
 \pagestyle{empty}
 
@@ -37,6 +35,9 @@
 
 \definecolor{bgcolor}{HTML}{FFFFFF}
 \definecolor{fgcolor}{HTML}{000000}
+
+\definecolor{gray0}{HTML}{B5BBBD}
+\definecolor{gray1}{HTML}{869092}
 
 \definecolor{accent}{HTML}{F9A620}
 
@@ -69,39 +70,37 @@
 \deflength{\cvbodyheight}{\dimexpr\textheight-4\fboxsep-\cvfootergap-\cvfooterheight\relax}
 \deflength{\topskip}{0pt}
 \deflength{\parindent}{0pt}
-
 %%% New Commands
 \newcounter{ii}
 
 \newcommand*{\arrow}[2][left]{
     \begin{tikzpicture}[scale=0.58]
         \ifstrequal{#1}{left}{%
-            \filldraw[fill=#2,draw=#2] (0,0) -- (0.2,0) -- (0.3,0.2) -- (0.2,0.4) -- (0,0.4) -- (0.1,0.2) -- cycle;%
+            \filldraw[fill=#2,draw=#2] (0,0)--(0.2,0)--(0.3,0.2)--(0.2,0.4)--(0,0.4)--(0.1,0.2)--cycle;%
         }{%
-            \filldraw[fill=#2,draw=#2] (0,0.2) -- (0.1,0) -- (0.3,0) -- (0.2,0.2) -- (0.3,0.4) -- (0.1,0.4) -- cycle;
+            \filldraw[fill=#2,draw=#2] (0,0.2)--(0.1,0)--(0.3,0)--(0.2,0.2)--(0.3,0.4)--(0.1,0.4)--cycle;
         }%
     \end{tikzpicture}
 }
 
-\newcommand*{\narrow}[3][left]{
-    \makeatletter
-    \defcounter{ii}{0}
-    \@whilenum\value{ii}<#2\do{%
+\newcommand*{\narrow}[3][left]{%
+    \defcounter{ii}{0}%
+    \whileboolexpr{test {\ifnumless{\value{ii}}{#2}}}{%
         \stepcounter{ii}%
         \arrow[#1]{#3}%
-        \hspace{-6pt}%\ifthenelse{\value{ii}=#2}{}{\hspace{-6pt}}%
+        \ifnumless{\value{ii}}{#2}{%
+            \hspace{-6pt}}{%
+        }%
     }%
-    \makeatother%
 }
 
-\newcommand*{\doublearrow}[2][left]{
+\newcommand*{\doublearrow}[2][left]{%
     \narrow[#1]{2}{#2}%
 }
 
-\newcommand*{\tripplearrow}[2][left]{
+\newcommand*{\triplearrow}[2][left]{%
     \narrow[#1]{3}{#2}%
 }
-
 
 \newcommand*{\currentwidth}{\dimexpr\linewidth-2\fboxsep\relax}
 \newcommand*{\cvheader}[2][CV]{
@@ -133,7 +132,6 @@
 
 \newcommand*{\cvbodysection}[2][]{
     \par%
-    
     \colorbox{darkboxbgcolor}{%
         \makebox(\currentwidth,\baselineskip)[l]{%
             \color{darkboxfgcolor}%
@@ -143,11 +141,34 @@
             }%
         }%
     }%
+    \medskip%
 }
 
-\newcommand*{\cvquote}[1]{
-
+\newcommand*{\cvquote}[1]{%
+    \parbox{\currentwidth}{%
+        \begin{quote}
+            \doublearrow{gray0}%
+            #1%
+            \doublearrow[right]{gray0}%
+        \end{quote}%
+    }%
 }
+
+\DeclareListParser*{\forssvlist}{;}
+
+\newcommand{\cventry}[4]{%
+    \renewcommand{\labelitemi}{\arrow{gray1}}
+    \begin{tabularx}{\currentwidth}{Xlcl}
+        \textbf{#2} & \textcolor{accent}{#3} & \textcolor{gray0}{\textbullet} & \textcolor{gray1}{#1}
+    \end{tabularx}
+    \textcolor{gray0}{\hrule}
+    \begin{itemize}
+        \deflength{\itemsep}{0pt}
+        \forssvlist{\item}{#4}
+    \end{itemize}
+}
+
+%% Environments
 
 \newsavebox{\sidebarbox}
 \newenvironment*{cvsidebar}{%
@@ -190,9 +211,67 @@
 \begin{cvbody}
     \cvheader{Thorn Thaler}%
 
-    %\cvbodysection[\doublearrow{white}]{a}%
+    \cvquote{%
+        A highly motivated, adaptable and fast learning \textbf{Senior Data Scientist} with a
+        quenchless passion for \textbf{coding} and a proven track record as a
+        \textbf{coach \& leader} interested in opportunities where his
+        \textbf{creativity, sales and presentation talents} can be exerted in a technological
+        field to help defining \textbf{strategies} to valorize the \textbf{potential of data}.%
+    }%
 
-    \cvbodysection[\textbullet]{b}%
+    \cvbodysection[\triplearrow{gray0}]{Work Experience}%
+
+    \cventry{2020/01--current}
+    {Senior Data Scientist}
+    {Crif Bürgel}
+    {Coach and develop peers;
+        Score development using various Machine Learning algorithms;
+        Implementation of a Business Intelligence strategy}
+
+    \cventry{2018/01--2019/12}
+    {Lead Connected Kitchen for Ambient Food}
+    {Nestlé PTC Singen}
+    {Scouting and testing of connected kitchen devices;
+        Definition of connected kitchen stratgey;
+        Assessment of Machine Learning algorithm possibilities for new business models}
+
+    \cventry{2014/01--2017/12}
+    {Lead Product Improvement Modelling}
+    {Nestlé PTC Singen}
+    {Responsible for the global roll-out of a consumer centric and data driven approach to translate
+        consumer liking into product characteristics;
+        Development of the methodology’s next generation to incorporate communication effects;
+        Coordination and coaching of teams in Singapore, Shanghai and India to contribute to
+        the defined strategy}
+
+    \cventry{2014/01--2019/12}
+    {Senior Data Scientist}
+    {Nestlé PTC Singen}
+    {Coordination and training of junior Data Scientists;
+        Statistical consultancy of R\&D projects;
+        Development of predictive models and tools}
+
+    \cventry{2011/10--2013/12}
+    {Leadership Team Goal Alignment Pillar}
+    {Nestlé Research Lausanne}
+    {Certified Six Sigma Green Belt;
+        Organization and facilitation of workshops related to problem solving;
+        Definition and monitoring of Key Performance Indicators}
+
+    \cventry{2011/10--2013/12}
+    {Data Scientist}
+    {Nestlé Research Lausanne}
+    {Development of predictive models to estimate effects of process and recipe parameters on
+        key sensory and performance indicators;
+        Development of R libraries for modeling and data visualization;
+        Supervision and coaching of interns}
+
+    \cventry{2010/04--2011/10}
+    {Junior Data Scientist}
+    {Nestlé Research Lausanne}
+    {Multivariate data analysis in the field of sensory science;
+        Analysis of consumer tests to determine optimal product characteristics;
+        Design-of-Experiments to plan and analyse trials for projects related to food research}
 \end{cvbody}
 \begin{cvsidebar}
 \end{cvsidebar}%
