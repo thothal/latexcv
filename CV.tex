@@ -9,8 +9,9 @@
 \usepackage{etoolbox}
 \usepackage{tikz}
 \usepackage{tabularx}
+\usepackage{setspace}
 \usepackage{fontawesome5}
-% \usepackage[hidelinks]{hyperref}
+\usepackage[hidelinks]{hyperref}
 % \usepackage{transparent}
 
 % \usepackage{bm}
@@ -20,7 +21,7 @@
 % \usepackage{multicol}			
 % \usepackage{multirow}
 % \usepackage{array}
-\usepackage[a4paper,vmargin=0pt,hmargin=5pt]{geometry}
+\usepackage[a4paper,vmargin=5pt,hmargin=5pt]{geometry}
 
 \pagestyle{empty}
 
@@ -57,6 +58,7 @@
 \newlength{\cvbodyheight}
 \newlength{\cvfootergap}
 \newlength{\cvfooterheight}
+\newlength{\iconadjustment}
 
 \deflength{\cvbodywidth}{0.75\textwidth}
 \deflength{\cvsidebargap}{5pt}
@@ -118,7 +120,6 @@
     \par%
     \nointerlineskip%
     \vspace*{\cvfootergap}%
-    
     \colorbox{lightboxbgcolor}{%
         \small%
         \makebox(\currentwidth,\cvfooterheight){%
@@ -144,6 +145,17 @@
     \medskip%
 }
 
+\newcommand*{\cvsidebarsection}[1]{
+    \centering{
+        \large{%
+            \uppercase{#1}%
+        }%
+        \par
+        \rule[.5\baselineskip]{.7\currentwidth}{0.4pt}%
+        \par%
+    }%    
+}
+
 \newcommand*{\cvquote}[1]{%
     \parbox{\currentwidth}{%
         \begin{quote}
@@ -154,7 +166,7 @@
     }%
 }
 
-\DeclareListParser*{\forssvlist}{;}
+\DeclareListParser*{\fornllist}{\\}
 
 \newcommand{\cventry}[4]{%
     \renewcommand{\labelitemi}{\arrow{gray1}}
@@ -164,8 +176,34 @@
     \textcolor{gray0}{\hrule}
     \begin{itemize}
         \deflength{\itemsep}{0pt}
-        \forssvlist{\item}{#4}
+        \fornllist{\item}{#4}
     \end{itemize}
+}
+
+\newcommand*{\cvicon}[2][]{%
+    {%
+        \ifstrempty{#1}{}{\color{#1}}%
+        \faIcon{#2}%
+    }%
+}
+
+\newcommand*{\cvicontextaligned}[3][]{%
+    \setbox0\hbox{#3}
+    \setbox1\hbox{\cvicon[#1]{#2}}
+    \deflength{\iconadjustment}{\dimexpr\ht0-\ht1\relax}
+    \raisebox{\dimexpr\iconadjustment/2\relax}{\cvicon[#1]{#2}}
+}
+
+\newcommand*{\cvicontext}[3][]{%
+    \cvicontextaligned[#1]{#2}{#3}\;#3%
+}
+
+\newcommand*{\cviconlink}[4][]{%
+    \cvicontextaligned[#1]{#2}{#3}\;\href{#4}{#3}
+}
+
+\newcommand*{\cviconemail}[4][]{%
+    \cvicontextaligned[#1]{#2}{#3}\;\href{mailto:#4}{#3}
 }
 
 %% Environments
@@ -175,6 +213,7 @@
     \begin{lrbox}{\sidebarbox}%
         \begin{minipage}[t][\cvbodyheight][t]{\cvsidebarwidth}%
             \vspace{0pt}% need this to ensure minipages align c.f. https://bit.ly/3pioFT7
+            \bigskip%
             \color{darkboxfgcolor}%
 }{%
         \end{minipage}%
@@ -205,6 +244,16 @@
     \ignorespacesafterend%
 }
 
+\newenvironment*{cvsidebarbox}{%
+    \ignorespaces%
+    \begin{spacing}{1.5}
+    \centering
+}{%
+    \end{spacing}
+    \vspace{2\baselineskip}
+    \ignorespacesafterend%
+}
+
 %%% hooks
 
 \begin{document}
@@ -224,56 +273,67 @@
     \cventry{2020/01--current}
     {Senior Data Scientist}
     {Crif Bürgel}
-    {Coach and develop peers;
-        Score development using various Machine Learning algorithms;
+    {Coach and develop peers\\
+        Score development using various Machine Learning algorithms\\
         Implementation of a Business Intelligence strategy}
 
     \cventry{2018/01--2019/12}
     {Lead Connected Kitchen for Ambient Food}
     {Nestlé PTC Singen}
-    {Scouting and testing of connected kitchen devices;
-        Definition of connected kitchen stratgey;
+    {Scouting and testing of connected kitchen devices\\
+        Definition of connected kitchen stratgey\\
         Assessment of Machine Learning algorithm possibilities for new business models}
 
     \cventry{2014/01--2017/12}
     {Lead Product Improvement Modelling}
     {Nestlé PTC Singen}
     {Responsible for the global roll-out of a consumer centric and data driven approach to translate
-        consumer liking into product characteristics;
-        Development of the methodology’s next generation to incorporate communication effects;
+        consumer liking into product characteristics\\
+        Development of the methodology’s next generation to incorporate communication effects\\
         Coordination and coaching of teams in Singapore, Shanghai and India to contribute to
         the defined strategy}
 
     \cventry{2014/01--2019/12}
     {Senior Data Scientist}
     {Nestlé PTC Singen}
-    {Coordination and training of junior Data Scientists;
-        Statistical consultancy of R\&D projects;
+    {Coordination and training of junior Data Scientists\\
+        Statistical consultancy of R\&D projects\\
         Development of predictive models and tools}
 
     \cventry{2011/10--2013/12}
     {Leadership Team Goal Alignment Pillar}
     {Nestlé Research Lausanne}
-    {Certified Six Sigma Green Belt;
-        Organization and facilitation of workshops related to problem solving;
+    {Certified Six Sigma Green Belt\\
+        Organization and facilitation of workshops related to problem solving\\
         Definition and monitoring of Key Performance Indicators}
 
     \cventry{2011/10--2013/12}
     {Data Scientist}
     {Nestlé Research Lausanne}
     {Development of predictive models to estimate effects of process and recipe parameters on
-        key sensory and performance indicators;
-        Development of R libraries for modeling and data visualization;
+        key sensory and performance indicators\\
+        Development of R libraries for modeling and data visualization\\
         Supervision and coaching of interns}
 
     \cventry{2010/04--2011/10}
     {Junior Data Scientist}
     {Nestlé Research Lausanne}
-    {Multivariate data analysis in the field of sensory science;
-        Analysis of consumer tests to determine optimal product characteristics;
+    {Multivariate data analysis in the field of sensory science\\
+        Analysis of consumer tests to determine optimal product characteristics\\
         Design-of-Experiments to plan and analyse trials for projects related to food research}
 \end{cvbody}
 \begin{cvsidebar}
+    \cvsidebarsection{Contact}
+    \begin{cvsidebarbox}
+        \cvicontext{map-marker-alt}{Hamburg, Germany}\\
+        \cvicontext{mobile-alt}{+49 174 999 77 57}\\
+        \cviconemail{paper-plane}{thorn.thaler@thothal.at}{thorn.thaler@thothal.at}\\
+        \cviconlink{mouse-pointer}{thothal.at}{https://www.thothal.at}
+        \cviconlink{linkedin}{thorn.thaler}{https://www.linkedin.com/in/thorn-thaler-197b5581/}\\
+        \cviconlink{github}{thothal}{https://github.com/thothal}
+        \cviconlink{stack-overflow}{thothal}{https://stackoverflow.com/users/4125751/thothal}
+    \end{cvsidebarbox}
+    \cvsidebarsection{Skills}
 \end{cvsidebar}%
 \cvfooter{Thorn Thaler}{Staudingerstraße 38}{22607 Hamburg}
 \end{document}
