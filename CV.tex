@@ -12,6 +12,10 @@
 \usepackage{setspace}
 \usepackage{fontawesome5}
 \usepackage[hidelinks]{hyperref}
+\usepackage{bm}
+\usepackage{silence}
+\WarningFilter{etex}{Extended allocation}
+\usepackage{worldflags}
 % \usepackage{transparent}
 
 % \usepackage{bm}
@@ -74,6 +78,7 @@
 \deflength{\parindent}{0pt}
 %%% New Commands
 \newcounter{ii}
+\newcounter{listlen}
 
 \newcommand*{\arrow}[2][left]{
     \begin{tikzpicture}[scale=0.58]
@@ -106,7 +111,6 @@
 
 \newcommand*{\currentwidth}{\dimexpr\linewidth-2\fboxsep\relax}
 \newcommand*{\cvheader}[2][CV]{
-    \vspace{-\fboxsep}%
 	\colorbox{darkboxbgcolor}{%
         \HUGE%
         \makebox(\currentwidth,\baselineskip){%
@@ -153,6 +157,7 @@
         \par
         \rule[.5\baselineskip]{.7\currentwidth}{0.4pt}%
         \par%
+        \vspace{-\medskipamount}
     }%    
 }
 
@@ -180,6 +185,10 @@
     \end{itemize}
 }
 
+\newcommand*{\cviconspace}[3][\;]{%
+  #2#1#3%
+}
+
 \newcommand*{\cvicon}[2][]{%
     {%
         \ifstrempty{#1}{}{\color{#1}}%
@@ -195,21 +204,42 @@
 }
 
 \newcommand*{\cvicontext}[3][]{%
-    \cvicontextaligned[#1]{#2}{#3}\;#3%
+    \cviconspace{\cvicontextaligned[#1]{#2}{#3}}{#3}%
 }
 
 \newcommand*{\cviconlink}[4][]{%
-    \cvicontextaligned[#1]{#2}{#3}\;\href{#4}{#3}
+    \cviconspace{\cvicontextaligned[#1]{#2}{#3}}{\href{#4}{#3}}
 }
 
 \newcommand*{\cviconemail}[4][]{%
-    \cvicontextaligned[#1]{#2}{#3}\;\href{mailto:#4}{#3}
+    \cviconspace{\cvicontextaligned[#1]{#2}{#3}}{\href{mailto:#4}{#3}}
+}
+
+\newcommand*{\cvlanguage}[3][7pt]{%
+    \cviconspace{\worldflag[width=#1]{#2}}{#3}
+}
+
+\newcommand*{\cvrating}[5][10]{%
+\begin{onehalfspace}
+    \cvicontext[#5]{#4}{#3}%
+    \par%
+    \defcounter{ii}{0}%
+    \whileboolexpr{test {\ifnumless{\value{ii}}{#1}}}{%
+        \ifnumless{\value{ii}}{#2}{%
+            \cvicon[accent]{star}}{%
+            \cvicon{star}%
+        }%
+        \stepcounter{ii}%
+    }%
+\end{onehalfspace}%
+\medskip%
 }
 
 %% Environments
 
 \newsavebox{\sidebarbox}
 \newenvironment*{cvsidebar}{%
+    \ignorespaces%
     \begin{lrbox}{\sidebarbox}%
         \begin{minipage}[t][\cvbodyheight][t]{\cvsidebarwidth}%
             \vspace{0pt}% need this to ensure minipages align c.f. https://bit.ly/3pioFT7
@@ -233,6 +263,7 @@
 \newenvironment*{cvbody}{%
     \ignorespaces%
     \begin{minipage}[t][\cvbodyheight][t]{\cvbodywidth}%
+        \vspace{-\fboxsep}%
 }{%
     \end{minipage}%
     \ifbool{isleft}{%
@@ -244,8 +275,9 @@
     \ignorespacesafterend%
 }
 
-\newenvironment*{cvsidebarbox}{%
+\newenvironment*{cvsidebarbox}[1][]{%
     \ignorespaces%
+    \ifstrequal{#1}{b}{\vfill}{}%
     \begin{spacing}{1.5}
     \centering
 }{%
@@ -269,7 +301,6 @@
     }%
 
     \cvbodysection[\triplearrow{gray0}]{Work Experience}%
-
     \cventry{2020/01--current}
     {Senior Data Scientist}
     {Crif Bürgel}
@@ -333,7 +364,70 @@
         \cviconlink{github}{thothal}{https://github.com/thothal}
         \cviconlink{stack-overflow}{thothal}{https://stackoverflow.com/users/4125751/thothal}
     \end{cvsidebarbox}
-    \cvsidebarsection{Skills}
+
+    \cvsidebarsection{Programming}
+    \begin{cvsidebarbox}
+        \cvrating{10}{R}{r-project}{}
+        \cvrating{7}{SQL}{database}{}
+        \cvrating{4}{Python}{python}{}
+    \end{cvsidebarbox}
+
+    \begin{cvsidebarbox}[b]
+        \includegraphics[width=0.35\currentwidth]{qrcode}
+    \end{cvsidebarbox}
 \end{cvsidebar}%
+\cvfooter{Thorn Thaler}{Staudingerstraße 38}{22607 Hamburg}
+
+\newpage%
+
+\begin{cvsidebar}
+    \cvsidebarsection{Awards}
+    \begin{cvsidebarbox}
+        \cvicontext{gem}{Lean Award 2016}\\
+        \cvicontext{award}{Best master's thesis 2009}
+    \end{cvsidebarbox}
+
+    \cvsidebarsection{Trainings}
+    \begin{cvsidebarbox}
+        \cvicontext{chalkboard-teacher}{Train the Trainer}\\
+        \cvicontext{comments}{Everyday Coaching}\\
+        \cviconspace{\scalebox{1.5}{\(\bm\sigma\)}}{Six Sigma Green Belt}
+    \end{cvsidebarbox}
+
+    \cvsidebarsection{Languages}
+    \begin{cvsidebarbox}
+        \cvlanguage{DE}{Mother tongue}\\
+        \cvlanguage{GB}{Fluent}
+        \cvlanguage{FR}{Advanced}
+    \end{cvsidebarbox}
+
+    \cvsidebarsection{Interests}
+    \begin{cvsidebarbox}
+        \Large{%
+            \cvicon{utensils}\quad\cvicon{book}\quad\cvicon{dice}
+        }
+    \end{cvsidebarbox}
+\end{cvsidebar}%
+\begin{cvbody}
+    \cvbodysection{Education}
+    \cventry{2008--2009}
+    {Master’s programme Technical Mathematics}
+    {University of Technology Graz}
+    {Major field of study: Operations Research and Statistics\\
+        Master's thesis: The Extended-Quasi-Likelihood-Function in Generalized Linear Models\\
+        Degree Summa Cum Laude}
+
+    \cventry{2006--2007}
+    {ERASMUS}
+    {Helsinki University of Technology}
+    {Exchange student\\
+        Research assistant at the Laboratory for Theoretical Computer Science}
+
+    \cventry{1999--2008}
+    {Bachelor’s degree Technical Mathematics}
+    {University of Technology, Graz}
+    {Bachelor's thesis 1: Analysis of Particular Matter in Graz Using Mixed Probability Models\\
+        Bachelos's thesis 2: Cateorical Data Analysis}
+\end{cvbody}
 \cvfooter{Thorn Thaler}{Staudingerstraße 38}{22607 Hamburg}
 \end{document}
