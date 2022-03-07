@@ -203,8 +203,8 @@
     \raisebox{\dimexpr\iconadjustment/2\relax}{\cvicon[#1]{#2}}
 }
 
-\newcommand*{\cvicontext}[3][]{%
-    \cviconspace{\cvicontextaligned[#1]{#2}{#3}}{#3}%
+\newcommand*{\cvicontext}[3][\;]{%
+    \cviconspace[#1]{\cvicontextaligned{#2}{#3}}{#3}%
 }
 
 \newcommand*{\cviconlink}[4][]{%
@@ -368,8 +368,25 @@
     \cvsidebarsection{Programming}
     \begin{cvsidebarbox}
         \cvrating{10}{R}{r-project}{}
+        \cvrating{5}{Python}{python}{}
         \cvrating{7}{SQL}{database}{}
-        \cvrating{4}{Python}{python}{}
+        \cvrating{4}{Scripting}{terminal}{}
+        \cvrating{4}{JavaScript}{js}{}
+        \cvrating{10}{VBA}{code}{}
+    \end{cvsidebarbox}
+
+    \cvsidebarsection{Statistics}
+    \begin{cvsidebarbox}
+        Generalized Linear Models, Logistic Regression, Random Forrests,
+        Multivariate Statistics, Design of Experiments, Clustering
+    \end{cvsidebarbox}
+
+    \cvsidebarsection{Softskills}
+    \begin{cvsidebarbox}
+        \cvicontext{comments}{Strong Communicator}\\
+        \cvicontext{book}{Story Teller}\\
+        \cvicontext{graduation-cap}{Lifelong Learner}\\
+        \cvicontext{box-open}{Outside-the-Box-Thinker}\\
     \end{cvsidebarbox}
 
     \begin{cvsidebarbox}[b]
@@ -381,6 +398,11 @@
 \newpage%
 
 \begin{cvsidebar}
+    \cvsidebarsection{Libraries}
+    \begin{cvsidebarbox}
+        shiny, plotly, tidyverse, data.table, crosstalk, ggplot, rmarkdown, R6, testthat
+    \end{cvsidebarbox}
+
     \cvsidebarsection{Awards}
     \begin{cvsidebarbox}
         \cvicontext{gem}{Lean Award 2016}\\
@@ -404,7 +426,7 @@
     \cvsidebarsection{Interests}
     \begin{cvsidebarbox}
         \Large{%
-            \cvicon{utensils}\quad\cvicon{book}\quad\cvicon{dice}
+            \cvicon{utensils}\quad\cvicon{book}\quad\cvicon{dice}%
         }
     \end{cvsidebarbox}
 \end{cvsidebar}%
@@ -425,7 +447,7 @@
 
     \cventry{1999--2008}
     {Bachelor’s degree Technical Mathematics}
-    {University of Technology, Graz}
+    {University of Technology Graz}
     {Bachelor's thesis 1: Analysis of Particular Matter in Graz Using Mixed Probability Models\\
         Bachelos's thesis 2: Cateorical Data Analysis}
 \end{cvbody}
