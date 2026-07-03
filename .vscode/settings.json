@@ -1,0 +1,45 @@
+{
+   "latex-workshop.formatting.latex": "latexindent",
+   "latex-workshop.latex.tools": [
+      {
+         "name": "latexmk (cv)",
+         "command": "latexmk",
+         "args": [
+            "-synctex=1",
+            "-interaction=nonstopmode",
+            "-file-line-error",
+            "-pdf",
+            "-outdir=%OUTDIR%",
+            "%DOC%"
+         ],
+         "env": {
+            "TEXINPUTS": "C:/Users/tthaler/Documents/2. Work/CV/layout/classes//;"
+         }
+      }
+   ],
+   "latex-workshop.latex.recipes": [
+      {
+         "name": "latexmk (cv)",
+         "tools": [
+            "latexmk (cv)"
+         ]
+      }
+   ],
+   "latex-workshop.latex.recipe.default": "first",
+   "python.defaultInterpreterPath": "C:/Users/tthaler/AppData/Local/r-miniconda/envs/cv-render/python.exe",
+   "python.terminal.activateEnvironment": true,
+   "python.condaPath": "C:/Users/tthaler/AppData/Local/r-miniconda/condabin/conda.bat",
+   "terminal.integrated.profiles.windows": {
+      "pwsh (cv-render)": {
+         "path": "pwsh",
+         "args": [
+            "-NoExit",
+            "-Command",
+            "conda activate cv-render"
+         ]
+      }
+   },
+   "terminal.integrated.defaultProfile.windows": "pwsh (cv-render)",
+   "python-envs.defaultEnvManager": "ms-python.python:conda",
+   "python-envs.defaultPackageManager": "ms-python.python:conda"
+}

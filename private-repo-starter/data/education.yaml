@@ -1,0 +1,25 @@
+education:
+  kind: timeline
+
+  title:
+    de: Ausbildung
+    en: Education
+
+  items:
+    - period:
+        start: 2018
+        end: 2020
+
+      institution: Example University
+
+      degree:
+        de: Masterabschluss
+        en: Master's Degree
+
+      details:
+        de:
+          - Platzhalterdetail 1
+          - Platzhalterdetail 2
+        en:
+          - Placeholder detail 1
+          - Placeholder detail 2

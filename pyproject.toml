@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "latexcv"
+version = "0.1.0"
+description = "Render and compile CVs from YAML data using Jinja2 and LaTeX"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "jinja2>=3.1",
+    "PyYAML>=6.0",
+    "mistletoe>=1.4",
+    "qrcode[pil]>=7.4",
+]
+
+[project.scripts]
+cv-render = "latexcv.cli:main"
+
+[tool.setuptools]
+packages = ["latexcv"]

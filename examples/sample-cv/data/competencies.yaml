@@ -1,0 +1,133 @@
+platforms:
+  kind: list
+
+  title:
+    de: AI & Plattformen
+    en: AI & Platforms
+
+  items:
+    - label:
+        de: Prompt Engineering
+        en: Prompt Engineering
+    - label:
+        de: LLM APIs
+        en: LLM APIs
+    - label:
+        de: Dashboards
+        en: Dashboards
+    - label:
+        de: Cloud Analytics
+        en: Cloud Analytics
+
+
+statistics:
+  kind: list
+
+  title:
+    de: Statistik
+    en: Statistics
+
+  items:
+    - label: Regression
+    - label: Classification
+    - label: Experiment Design
+    - label: Time Series
+
+
+programming:
+  kind: list
+
+  title:
+    de: Programmierung
+    en: Programming
+
+  items:
+    - skill: Python
+      icon: python
+      level: 8
+
+    - skill: SQL
+      icon: database
+      level: 8
+
+    - skill: R
+      icon: r-project
+      level: 6
+
+    - skill: JavaScript
+      icon: js
+      level: 5
+
+
+libraries:
+  kind: list
+
+  title:
+    de: Libraries
+    en: Libraries
+
+  items:
+    - label: pandas
+    - label: scikit-learn
+    - label: numpy
+    - label: matplotlib
+    - label: plotly
+    - label: seaborn
+
+
+soft_skills:
+  kind: list
+
+  title:
+    de: Soft Skills
+    en: Soft Skills
+
+  items:
+    - icon: comments
+      label:
+        de: Klare Kommunikation
+        en: Clear Communicator
+
+    - icon: book
+      label:
+        de: Storytelling
+        en: Storytelling
+
+    - icon: users
+      label:
+        de: Teamorientiert
+        en: Team Oriented
+
+    - icon: lightbulb
+      label:
+        de: Problemloeser
+        en: Problem Solver
+
+
+languages:
+  kind: list
+
+  title:
+    de: Sprachen
+    en: Languages
+
+  items:
+    - flag: DE
+
+      language:
+        de: Deutsch
+        en: German
+
+      level:
+        de: Fliessend
+        en: Fluent
+
+    - flag: GB
+
+      language:
+        de: Englisch
+        en: English
+
+      level:
+        de: Fliessend
+        en: Fluent

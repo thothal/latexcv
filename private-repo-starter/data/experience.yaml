@@ -1,0 +1,25 @@
+experience:
+  kind: timeline
+
+  title:
+    de: Berufserfahrung
+    en: Work Experience
+
+  items:
+    - period:
+        start: 2023-01
+        end: present
+
+      organization: Example Company
+
+      title:
+        de: Senior Rolle
+        en: Senior Role
+
+      highlights:
+        de:
+          - Platzhalterpunkt 1
+          - Platzhalterpunkt 2
+        en:
+          - Placeholder point 1
+          - Placeholder point 2

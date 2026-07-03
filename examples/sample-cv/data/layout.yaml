@@ -1,0 +1,64 @@
+layout:
+  version: 2
+
+  pages:
+    - id: page1
+      settings:
+        sidebar_side: left
+      regions:
+        header:
+          - block: profile
+            renderer: profile_header
+          - block: summary_quote
+            renderer: quote
+        body:
+          - block: experience
+            renderer: timeline
+        sidebar:
+          - block: contact
+            renderer: contact_list
+          - block: soft_skills
+            renderer: icon_text_list
+          - block: programming
+            renderer: rating_list
+          - block: languages
+            renderer: language_list
+
+    - id: page2
+      settings:
+        sidebar_side: right
+      regions:
+        body:
+          - block: education
+            renderer: timeline
+        sidebar:
+          - block: platforms
+            renderer: comma_list
+          - block: statistics
+            renderer: comma_list
+          - block: libraries
+            renderer: comma_list
+          - block: awards
+            renderer: icon_text_list
+            items:
+              order:
+                - analytics_case_prize
+                - data_story_award
+          - block: trainings
+            renderer: icon_text_list
+            items:
+              include:
+                - cloud_data_foundations
+                - train_the_trainer
+              order:
+                - cloud_data_foundations
+                - train_the_trainer
+          - block: interests
+            renderer: icon_grid
+            items:
+              order:
+                - chess
+                - hiking
+                - photography
+          - block: website_qr
+            renderer: qr_asset

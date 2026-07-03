@@ -1,0 +1,208 @@
+{# ==========================================================================
+   Section Helpers
+   ========================================================================== #}
+
+{% macro body_section(title) -%}
+\cvbodysection[\triplearrow{gray0}]{ {{- title | tex -}} }
+{%- endmacro %}
+
+
+{% macro sidebar_section(title) -%}
+\cvsidebarsection{ {{- title | tex -}} }
+{%- endmacro %}
+
+
+{% macro optional_sidebar_section(title) -%}
+{% if title %}
+{{ sidebar_section(title) }}
+\begin{cvsidebarbox}
+{% set content = caller() | trim %}
+{{ content }}
+\end{cvsidebarbox}
+{% endif %}
+{%- endmacro %}
+
+
+{# ==========================================================================
+   Footer
+   ========================================================================== #}
+
+{% macro footer(profile) -%}
+\cvfooter{ {{- profile | full_name | tex -}} }{ {{- profile.address.street | tex -}} }{ {{- profile | postal_city | tex -}} }
+{%- endmacro %}
+
+
+{# ==========================================================================
+   Contact
+   ========================================================================== #}
+
+{% macro icon_text(icon, text) -%}
+\cvicontext{ {{- icon -}} }{ {{- text | tex -}} }
+{%- endmacro %}
+
+
+{% macro icon_link(icon, label, url) -%}
+\cviconlink{ {{- icon -}} }{ {{- label | tex -}} }{ {{- url -}} }
+{%- endmacro %}
+
+
+{% macro icon_email(icon, label, email) -%}
+\cviconemail{ {{- icon -}} }{ {{ label | tex }} }{ {{ email }} }
+{%- endmacro %}
+
+
+{% macro contact_block(contact, profile, lang) -%}
+{% for item in contact -%}
+{%- if item.type == "location" -%}
+{{ icon_text(item.icon, profile.address.city ~ ", " ~ profile.address.country[lang]) }}\\
+{%- elif item.type == "phone" -%}
+{{ icon_text(item.icon, item.value) }}\\
+{%- elif item.type == "email" -%}
+{{ icon_email(item.icon, item.value, item.value) }}\\
+{%- elif item.type in ["website", "linkedin", "github", "stackoverflow"] and item.icon is defined and item.label is defined and item.url is defined -%}
+{{ icon_link(item.icon, item.label, item.url) }}{% if item.type == "linkedin" %}\\{% endif %}
+{%- endif -%}
+{{ '\n' -}}
+{%- endfor %}
+{%- endmacro %}
+
+
+{# ==========================================================================
+   Skills
+   ========================================================================== #}
+
+{% macro rating(skill) -%}
+\cvrating{ {{- skill.level -}} }{ {{- skill.skill | tex -}} }{ {{- skill.icon -}} }{}
+{%- endmacro %}
+
+
+{% macro language(language, lang) -%}
+\cvlanguage{ {{- language.flag -}} }{ {{- language.level[lang] | tex -}} }
+{%- endmacro %}
+
+
+{# ==========================================================================
+   Achievement Blocks
+   ========================================================================== #}
+
+{% macro icon_title(item, lang) -%}
+\cvicontext{ {{- item.icon -}} }{ {{- item.title[lang] | tex }} }
+{%- endmacro %}
+
+
+{% macro interest_icon(item) -%}
+\cvicon{ {{- item.icon -}} }
+{%- endmacro %}
+
+
+{# ==========================================================================
+    V2 Render Dispatch
+    ========================================================================== #}
+
+{% macro render_header_unit(unit, profile, lang) -%}
+{% if unit.renderer == "profile_header" %}
+\cvheader{ {{- profile | full_name | tex -}} }%
+{% elif unit.renderer == "quote" and unit.data["text"] %}
+\cvquote{ %
+ {{ unit.data["text"] | md_latex | soft_wrap(100) }}%
+}%
+{% endif %}
+{%- endmacro %}
+
+
+{% macro render_body_unit(unit, lang) -%}
+{% if unit.renderer == "timeline" %}
+   {% set items = unit.data["items"] if unit.data["items"] is defined else [] %}
+   {% if unit.title %}
+      {{ body_section(unit.title) }}
+   {% endif %}
+   {% for entry in items %}
+      {% if unit.block_id == "education" %}
+         \cventry{ {{- entry | period(lang) -}} }
+         { {{- entry.degree[lang] | tex -}} }
+         { {{- entry.institution | tex -}} }
+         { {{- entry.details[lang] | lines -}} }
+      {% else %}
+         \cventry{ {{- entry | period(lang) -}} }
+         { {{- entry.title[lang] | tex -}} }
+         { {{- entry.organization | tex -}} }
+         { {{- entry.highlights[lang] | lines -}} }
+      {% endif %}
+
+   {% endfor %}
+{% endif %}
+{%- endmacro %}
+
+
+{% macro render_sidebar_unit(unit, profile, qr_code_path, lang) -%}
+{% if unit.renderer == "contact_list" %}
+   {% set items = unit.data["items"] if unit.data["items"] is defined else [] %}
+   {% if unit.title %}
+      {{ sidebar_section(unit.title) }}
+   {% endif %}
+   \begin{cvsidebarbox}
+      {{ contact_block(items, profile, lang) }}
+   \end{cvsidebarbox}
+{% elif unit.renderer == "comma_list" %}
+   {% set items = unit.data["items"] if unit.data["items"] is defined else [] %}
+   {% set ns = namespace(labels=[]) %}
+   {% for item in items %}
+      {% set label = item.label if item.label is defined else item %}
+      {% if label is mapping %}
+         {% if label[lang] is defined %}
+            {% set ns.labels = ns.labels + [label[lang]] %}
+         {% elif label["de"] is defined %}
+            {% set ns.labels = ns.labels + [label["de"]] %}
+         {% elif label["en"] is defined %}
+            {% set ns.labels = ns.labels + [label["en"]] %}
+         {% endif %}
+      {% else %}
+         {% set ns.labels = ns.labels + [label] %}
+      {% endif %}
+   {% endfor %}
+   {% call optional_sidebar_section(unit.title) %}
+      {{ ns.labels | comma_list }}
+   {% endcall %}
+{% elif unit.renderer == "icon_text_list" %}
+   {% set items = unit.data["items"] if unit.data["items"] is defined else [] %}
+   {% call optional_sidebar_section(unit.title) %}
+      {% for item in items %}
+         {% if item.label is defined %}
+            {{ icon_text(item.icon, item.label[lang]) }}{% if not loop.last %}\\{% endif %}
+         {% else %}
+            {{ icon_title(item, lang) }}{% if not loop.last %}\\{% endif %}
+         {% endif %}
+      {% endfor %}
+   {% endcall %}
+{% elif unit.renderer == "rating_list" %}
+   {% set items = unit.data["items"] if unit.data["items"] is defined else [] %}
+   {% call optional_sidebar_section(unit.title) %}
+      {% for skill in items %}
+         {{ rating(skill) }}
+      {% endfor %}
+   {% endcall %}
+{% elif unit.renderer == "language_list" %}
+   {% set items = unit.data["items"] if unit.data["items"] is defined else [] %}
+   {% call optional_sidebar_section(unit.title) %}
+      {% for language_item in items %}
+         {{ language(language_item, lang) }}{% if not loop.last %}\\{% endif %}
+
+      {% endfor %}
+   {% endcall %}
+{% elif unit.renderer == "icon_grid" %}
+   {% set items = unit.data["items"] if unit.data["items"] is defined else [] %}
+   {% call optional_sidebar_section(unit.title) %}
+      \Large{
+         {% for item in items %}
+            {{- interest_icon(item) -}}{% if not loop.last %}\quad{% endif %}
+         {% endfor %}
+         }
+   {% endcall %}
+{% elif unit.renderer == "qr_asset" and qr_code_path %}
+   {% set options = unit.data["options"] if unit.data["options"] is defined else {} %}
+   {% set width = options["width"] if options["width"] is defined else 0.35 %}
+   \begin{cvsidebarbox}[b]
+      \includegraphics[width={{ width }}\currentwidth]{ {{- qr_code_path -}} }
+   \end{cvsidebarbox}
+{% endif %}
+{%- endmacro %}

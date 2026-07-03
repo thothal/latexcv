@@ -1,0 +1,90 @@
+platforms:
+  kind: list
+
+  title:
+    de: AI & Plattformen
+    en: AI & Platforms
+
+  items:
+    - label:
+        de: Generative AI
+        en: Generative AI
+    - label:
+        de: LLM APIs
+        en: LLM APIs
+
+
+statistics:
+  kind: list
+
+  title:
+    de: Statistik
+    en: Statistics
+
+  items:
+    - label: Regression
+    - label: Classification
+
+
+programming:
+  kind: list
+
+  title:
+    de: Programmierung
+    en: Programming
+
+  items:
+    - skill: Python
+      icon: python
+      level: 8
+    - skill: SQL
+      icon: database
+      level: 7
+
+
+libraries:
+  kind: list
+
+  title:
+    de: Libraries
+    en: Libraries
+
+  items:
+    - label: pandas
+    - label: scikit-learn
+
+
+soft_skills:
+  kind: list
+
+  title:
+    de: Soft Skills
+    en: Soft Skills
+
+  items:
+    - icon: comments
+      label:
+        de: Kommunikation
+        en: Communication
+    - icon: users
+      label:
+        de: Teamarbeit
+        en: Teamwork
+
+
+languages:
+  kind: list
+
+  title:
+    de: Sprachen
+    en: Languages
+
+  items:
+    - flag: DE
+      level:
+        de: Fliessend
+        en: Fluent
+    - flag: GB
+      level:
+        de: Fliessend
+        en: Fluent

@@ -1,0 +1,45 @@
+{% import "macros.tex.j2" as cv %}
+
+\documentclass{yalcv}
+\usepackage[{{ babel_language }}]{babel}
+
+\begin{document}
+{% set profile = document.profile %}
+{% for page in document.pages %}
+  {% if page.settings.sidebar_side == "left" %}
+    \global\setbool{isleft}{true}%
+    \begin{cvsidebar}
+      {% for unit in page.regions.get("sidebar", []) %}
+        {{ cv.render_sidebar_unit(unit, profile, qr_code_path, lang) }}
+      {% endfor %}
+    \end{cvsidebar}%
+    \begin{cvbody}
+      {% for unit in page.regions.get("header", []) %}
+        {{ cv.render_header_unit(unit, profile, lang) }}
+      {% endfor %}
+      {% for unit in page.regions.get("body", []) %}
+        {{ cv.render_body_unit(unit, lang) }}
+      {% endfor %}
+    \end{cvbody}
+  {% else %}
+    \global\setbool{isleft}{true}%
+    \begin{cvbody}
+      {% for unit in page.regions.get("header", []) %}
+        {{ cv.render_header_unit(unit, profile, lang) }}
+      {% endfor %}
+      {% for unit in page.regions.get("body", []) %}
+        {{ cv.render_body_unit(unit, lang) }}
+      {% endfor %}
+    \end{cvbody}
+    \begin{cvsidebar}
+      {% for unit in page.regions.get("sidebar", []) %}
+        {{ cv.render_sidebar_unit(unit, profile, qr_code_path, lang) }}
+      {% endfor %}
+    \end{cvsidebar}%
+  {% endif %}
+  {{ cv.footer(profile) }}
+  {% if not loop.last %}
+\newpage%
+  {% endif %}
+{% endfor %}
+\end{document}

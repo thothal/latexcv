@@ -1,0 +1,72 @@
+profile:
+  kind: profile
+
+  data:
+    name:
+      first: Alex
+      last: Example
+
+    address:
+      street: 42 Demo Street
+      postal_code: 10001
+      city: Sample City
+      country:
+        de: Deutschland
+        en: Germany
+
+    headline:
+      de: Senior Data Analyst
+      en: Senior Data Analyst
+
+
+summary_quote:
+  kind: quote
+
+  text:
+    de: >
+      Fiktives CV-Beispiel fuer die Demonstration der Layout-Engine.
+      Enthaltene Daten sind rein beispielhaft und nicht personenbezogen.
+
+    en: >
+      Fictional CV example used to demonstrate the layout engine.
+      The data shown here is placeholder-only and not personal data.
+
+
+contact:
+  kind: list
+
+  title:
+    de: Kontakt
+    en: Contact
+
+  items:
+    - type: location
+      icon: map-marker-alt
+
+    - type: phone
+      icon: mobile-alt
+      value: "+1 555 0100"
+
+    - type: email
+      icon: paper-plane
+      value: alex.example@example.com
+
+    - type: website
+      icon: mouse-pointer
+      label: example.dev
+      url: https://example.dev
+
+    - type: linkedin
+      icon: linkedin
+      label: alex-example
+      url: https://www.linkedin.com/in/alex-example/
+
+    - type: github
+      icon: github
+      label: alex-example
+      url: https://github.com/alex-example
+
+    - type: stackoverflow
+      icon: stack-overflow
+      label: alex-example
+      url: https://stackoverflow.com/users/10000000/alex-example

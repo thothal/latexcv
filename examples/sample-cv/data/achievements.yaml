@@ -1,0 +1,81 @@
+awards:
+  kind: list
+
+  title:
+    de: Auszeichnungen
+    en: Awards
+
+  items:
+    - id: data_story_award
+      icon: gem
+
+      title:
+        de: Data Story Award
+        en: Data Story Award
+
+    - id: analytics_case_prize
+      icon: award
+
+      title:
+        de: Analytics Case Prize
+        en: Analytics Case Prize
+
+
+trainings:
+  kind: list
+
+  title:
+    de: Weiterbildungen
+    en: Trainings
+
+  items:
+    - id: train_the_trainer
+      icon: chalkboard-teacher
+
+      title:
+        de: Data Visualization Workshop
+        en: Data Visualization Workshop
+
+    - id: product_analytics_bootcamp
+      icon: comments
+
+      title:
+        de: Product Analytics Bootcamp
+        en: Product Analytics Bootcamp
+
+    - id: cloud_data_foundations
+      icon: certificate
+
+      title:
+        de: Cloud Data Foundations
+        en: Cloud Data Foundations
+
+
+interests:
+  kind: list
+
+  title:
+    de: Interessen
+    en: Interests
+
+  items:
+    - id: photography
+      icon: utensils
+
+      label:
+        de: Fotografie
+        en: Photography
+
+    - id: hiking
+      icon: book
+
+      label:
+        de: Wandern
+        en: Hiking
+
+    - id: chess
+      icon: dice
+
+      label:
+        de: Schach
+        en: Chess

@@ -1,0 +1,57 @@
+profile:
+  kind: profile
+
+  data:
+    name:
+      first: Your
+      last: Name
+
+    address:
+      street: Your Street 1
+      postal_code: 12345
+      city: Your City
+      country:
+        de: Deutschland
+        en: Germany
+
+    headline:
+      de: Ihre Rolle
+      en: Your Role
+
+
+summary_quote:
+  kind: quote
+
+  text:
+    de: Kurzprofil als Platzhalter. Bitte durch echte Inhalte ersetzen.
+    en: Placeholder summary. Replace with real content.
+
+
+contact:
+  kind: list
+
+  title:
+    de: Kontakt
+    en: Contact
+
+  items:
+    - type: location
+      icon: map-marker-alt
+
+    - type: phone
+      icon: mobile-alt
+      value: "+00 000 0000"
+
+    - type: email
+      icon: paper-plane
+      value: your.name@example.com
+
+    - type: website
+      icon: mouse-pointer
+      label: your-site.example
+      url: https://your-site.example
+
+    - type: linkedin
+      icon: linkedin
+      label: your-linkedin
+      url: https://www.linkedin.com/in/your-linkedin/
