@@ -41,9 +41,6 @@
 
 \pagecolor{bgcolor}
 
-\newbool{isleft}
-\setbool{isleft}{true}
-
 %%% Lengths
 \newlength{\cv@body@width}
 \newlength{\cv@sidebar@gap}
@@ -107,6 +104,9 @@
 
 %% gets the current width adjusting for the box seperators on left and right
 \newcommand*{\currentwidth}{\dimexpr\linewidth-2\fboxsep\relax}
+
+%% inserts the configured horizontal gap between body and sidebar columns
+\newcommand*{\cvcolumngap}{\hspace*{\cv@sidebar@gap}}
 
 %% creates a box used for the title (#2) optionally appended by a string #1
 \newcommand*{\cvheader}[2][CV]{
@@ -262,12 +262,6 @@
     \colorbox{darkboxbgcolor}{%
         \usebox{\sidebarbox}%
     }%
-    \ifbool{isleft}{%
-        \hspace*{\cv@sidebar@gap}%
-        \global\setbool{isleft}{false}%
-    }{%
-        \global\setbool{isleft}{true}%
-    }%
     \ignorespacesafterend%
 }
 
@@ -277,12 +271,6 @@
     \vspace{-\fboxsep}%
 }{%
     \end{minipage}%
-    \ifbool{isleft}{%
-        \hspace*{\cv@sidebar@gap}%
-        \global\setbool{isleft}{false}%
-    }{%
-        \global\setbool{isleft}{true}%
-    }%
     \ignorespacesafterend%
 }
 
