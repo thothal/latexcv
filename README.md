@@ -8,7 +8,7 @@ This repository is intentionally tool-focused and contains only sample data.
 
 - Python package and CLI: [latexcv](latexcv)
 - LaTeX/Jinja templates: [layout](layout)
-- Sample example profile: [examples/sample-cv/data](examples/sample-cv/data)
+- Full showcase profile: [examples/full-showcase/data](examples/full-showcase/data)
 - Optional R wrapper: [wrappers/r/render.R](wrappers/r/render.R)
 
 ## Requirements
@@ -42,8 +42,15 @@ python -m pip install -e .
 5. Render the sample profile:
 
 ```powershell
-cv-render examples/sample-cv/data --output-dir examples/sample-cv/output --lang en
-cv-render examples/sample-cv/data --output-dir examples/sample-cv/output --lang de
+cvrender examples/full-showcase/data --output-dir examples/full-showcase/output --lang en
+cvrender examples/full-showcase/data --output-dir examples/full-showcase/output --lang de
+```
+
+6. Render additional layout examples:
+
+```powershell
+cvrender examples/compact-one-page/data --output-dir examples/compact-one-page/output --lang en --tex-only
+cvrender examples/skills-focused/data --output-dir examples/skills-focused/output --lang en --tex-only
 ```
 
 ## CLI Usage
@@ -52,13 +59,20 @@ The CLI expects:
 
 - required positional `data_dir`
 - optional `--output-dir` (default: current directory)
-- optional `--lang` (default: `en`)
+- optional `-o, --output FILE` (explicit output file path/name)
+- optional `-l, --lang` (default: `en`)
+- optional `-t, --tex-only`
+- optional `-C, --[no-]cleanup`
+- optional `-F, --[no-]format-output`
 
 Examples:
 
 ```powershell
-cv-render examples/sample-cv/data
-cv-render examples/sample-cv/data --output-dir examples/sample-cv/output --lang de --tex-only
+cvrender examples/full-showcase/data
+cvrender examples/full-showcase/data --output-dir examples/full-showcase/output --lang de --tex-only
+cvrender examples/full-showcase/data -o examples/full-showcase/output/my-cv.pdf --lang en
+cvrender examples/full-showcase/data -o examples/full-showcase/output/my-cv.tex --lang en --tex-only
+cvrender examples/full-showcase/data -l de -t -o examples/full-showcase/output/short-opts.tex
 ```
 
 ## Document Model
@@ -73,10 +87,10 @@ See [docs/cv-spec.md](docs/cv-spec.md) for details.
 
 ## Troubleshooting
 
-- If `cv-render` is not found:
+- If `cvrender` is not found:
 
 ```powershell
-python -m latexcv.cli examples/sample-cv/data --output-dir examples/sample-cv/output --lang en
+python -m latexcv.cli examples/full-showcase/data --output-dir examples/full-showcase/output --lang en
 ```
 
 - If PDF compilation fails, verify `latexmk`:

@@ -7,19 +7,21 @@ import subprocess
 from pathlib import Path
 
 
-_PROJECT_ROOT = Path(__file__).resolve().parent.parent
-_DEFAULT_CLASSES_DIR = _PROJECT_ROOT / "layout" / "classes"
-_DEFAULT_OUTPUT_DIR = _PROJECT_ROOT / "output"
+_PACKAGE_ROOT = Path(__file__).resolve().parent
+_DEFAULT_OUTPUT_DIR = "output"
 _DEFAULT_COMPILER = "latexmk"
 
 
-def _relative_to_cwd(path: Path, cwd: Path) -> str:
-	"""Return a cwd-relative path when possible, else an absolute path."""
+def _resolve_default_classes_dir() -> Path:
+	"""Return repository classes dir when present, else packaged classes dir."""
 
-	try:
-		return str(path.resolve().relative_to(cwd.resolve()))
-	except ValueError:
-		return str(path.resolve())
+	repo_classes_dir = _PACKAGE_ROOT.parent / "layout" / "classes"
+	if repo_classes_dir.is_dir():
+		return repo_classes_dir
+	return _PACKAGE_ROOT / "layout" / "classes"
+
+
+_DEFAULT_CLASSES_DIR = _resolve_default_classes_dir()
 
 
 def _texinputs(classes_dir: Path) -> str:
@@ -39,18 +41,19 @@ def compile_tex_file(
 ) -> str:
 	"""Compile a LaTeX file to PDF using latexmk."""
 
+	cwd = Path.cwd()
 	tex_path = Path(tex_file)
 	if not tex_path.is_absolute():
-		tex_path = (_PROJECT_ROOT / tex_path).resolve()
+		tex_path = (cwd / tex_path).resolve()
 
 	output_path = Path(output_dir) if output_dir is not None else tex_path.parent
 	if not output_path.is_absolute():
-		output_path = (_PROJECT_ROOT / output_path).resolve()
+		output_path = (cwd / output_path).resolve()
 	output_path.mkdir(parents=True, exist_ok=True)
 
 	class_path = Path(classes_dir)
 	if not class_path.is_absolute():
-		class_path = (_PROJECT_ROOT / class_path).resolve()
+		class_path = (cwd / class_path).resolve()
 
 	env = os.environ.copy()
 	env["TEXINPUTS"] = _texinputs(class_path)
@@ -60,13 +63,13 @@ def compile_tex_file(
 		"-pdf",
 		"-interaction=nonstopmode",
 		"-file-line-error",
-		"-outdir=" + _relative_to_cwd(output_path, _PROJECT_ROOT),
-		_relative_to_cwd(tex_path, _PROJECT_ROOT),
+		"-outdir=" + str(output_path),
+		str(tex_path),
 	]
 
 	result = subprocess.run(
 		command,
-		cwd=_PROJECT_ROOT,
+		cwd=None,
 		env=env,
 		check=False,
 		capture_output=True,
@@ -83,12 +86,12 @@ def compile_tex_file(
 		cleanup_command = [
 			compiler_command,
 			"-c",
-			"-outdir=" + _relative_to_cwd(output_path, _PROJECT_ROOT),
-			_relative_to_cwd(tex_path, _PROJECT_ROOT),
+			"-outdir=" + str(output_path),
+			str(tex_path),
 		]
 		cleanup_result = subprocess.run(
 			cleanup_command,
-			cwd=_PROJECT_ROOT,
+			cwd=None,
 			env=env,
 			check=False,
 			capture_output=True,

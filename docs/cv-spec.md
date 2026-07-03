@@ -143,6 +143,10 @@ trainings:
 ```yaml
 layout:
   version: 2
+  settings:
+    colors:
+      panel_background: "3A4958"
+      accent: "F9A620"
   pages:
     - id: page1
       settings:
@@ -194,6 +198,24 @@ Supported item-level operations:
 - `include`
 - `exclude`
 - `order`
+
+Optional global layout settings:
+
+- `colors`: override built-in LaTeX class colors.
+
+Supported color keys:
+
+- `panel_background`
+- `panel_foreground`
+- `footer_background`
+- `footer_foreground`
+- `page_background`
+- `page_foreground`
+- `section_marker`
+- `timeline_meta`
+- `accent`
+
+Color values must be quoted 6-digit HEX strings (for example `"3A4958"`). If omitted, class defaults are used.
 
 ## Validation Rules
 

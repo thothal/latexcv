@@ -16,7 +16,10 @@ dependencies = [
 ]
 
 [project.scripts]
-cv-render = "latexcv.cli:main"
+cvrender = "latexcv.cli:main"
 
 [tool.setuptools]
 packages = ["latexcv"]
+
+[tool.setuptools.package-data]
+latexcv = ["layout/*.j2", "layout/classes/*.cls"]

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from pathlib import Path
+import re
 from typing import Any
 
 import yaml
@@ -15,6 +16,17 @@ _DEFAULT_LAYOUT_FILENAME = "layout.yaml"
 _SUPPORTED_REGIONS = {"header", "body", "sidebar"}
 _ALLOWED_BLOCK_KEYS = {"kind", "title", "items", "text", "source", "options", "data"}
 _SUPPORTED_CONTACT_TYPES = {"location", "phone", "email", "website", "linkedin", "github", "stackoverflow"}
+_SUPPORTED_COLOR_OVERRIDES = {
+    "panel_background",
+    "panel_foreground",
+    "footer_background",
+    "footer_foreground",
+    "page_background",
+    "page_foreground",
+    "section_marker",
+    "timeline_meta",
+    "accent",
+}
 _RENDERER_COMPATIBILITY = {
     "profile_header": {"profile"},
     "quote": {"quote"},
@@ -359,7 +371,34 @@ def _default_layout_spec() -> LayoutSpec:
                 },
             ),
         ],
+        settings={},
     )
+
+
+def _parse_color_overrides(value: Any, *, context: str) -> dict[str, str]:
+    """Parse and validate optional named color overrides in HEX format."""
+
+    if not isinstance(value, dict):
+        raise LayoutValidationError(f"{context} must be a mapping of color names to HEX values.")
+
+    parsed: dict[str, str] = {}
+    for raw_name, raw_hex in value.items():
+        if not isinstance(raw_name, str):
+            allowed = ", ".join(sorted(_SUPPORTED_COLOR_OVERRIDES))
+            raise LayoutValidationError(
+                f"{context} has unsupported color '{raw_name}'. Allowed colors: {allowed}."
+            )
+        if raw_name not in _SUPPORTED_COLOR_OVERRIDES:
+            allowed = ", ".join(sorted(_SUPPORTED_COLOR_OVERRIDES))
+            raise LayoutValidationError(
+                f"{context} has unsupported color '{raw_name}'. Allowed colors: {allowed}."
+            )
+        if not isinstance(raw_hex, str) or not re.fullmatch(r"[0-9A-Fa-f]{6}", raw_hex.strip()):
+            raise LayoutValidationError(
+                f"{context}.{raw_name} must be a 6-digit HEX string like '3A4958'."
+            )
+        parsed[raw_name] = raw_hex.strip().upper()
+    return parsed
 
 
 def _parse_layout_placement(data: dict[str, Any], context: str) -> LayoutPlacement:
@@ -405,6 +444,19 @@ def _parse_layout_spec(loaded: dict[str, Any]) -> LayoutSpec:
     if not isinstance(version, int):
         raise LayoutValidationError("Layout version must be an integer.")
 
+    layout_settings = root.get("settings") or {}
+    if not isinstance(layout_settings, dict):
+        raise LayoutValidationError("Layout settings must be a mapping.")
+
+    colors = layout_settings.get("colors")
+    if colors is not None:
+        parsed_settings = dict(layout_settings)
+        parsed_settings["colors"] = _parse_color_overrides(
+            colors,
+            context="Layout settings.colors",
+        )
+        layout_settings = parsed_settings
+
     pages_payload = root.get("pages")
     if not isinstance(pages_payload, list) or not pages_payload:
         raise LayoutValidationError("Layout must define at least one page.")
@@ -420,8 +472,8 @@ def _parse_layout_spec(loaded: dict[str, Any]) -> LayoutSpec:
             raise LayoutValidationError(f"Duplicate layout page id '{page_id}'.")
         seen_page_ids.add(page_id)
 
-        settings = page.get("settings") or {}
-        if not isinstance(settings, dict):
+        page_settings = page.get("settings") or {}
+        if not isinstance(page_settings, dict):
             raise LayoutValidationError(f"Layout page '{page_id}' has invalid settings.")
 
         regions_payload = page.get("regions") or {}
@@ -447,9 +499,9 @@ def _parse_layout_spec(loaded: dict[str, Any]) -> LayoutSpec:
                 placements.append(placement)
             regions[region_name] = placements
 
-        pages.append(PageSpec(id=page_id, settings=settings, regions=regions))
+        pages.append(PageSpec(id=page_id, settings=page_settings, regions=regions))
 
-    return LayoutSpec(version=version, pages=pages)
+    return LayoutSpec(version=version, pages=pages, settings=layout_settings)
 
 
 def load_layout_spec(
@@ -727,7 +779,12 @@ def load_render_document(
             regions[region_name] = units
         pages.append(RenderPage(id=page.id, settings=dict(page.settings), regions=regions))
 
-    return RenderDocument(lang=lang, profile=dict(profile_block.data), pages=pages)
+    return RenderDocument(
+        lang=lang,
+        profile=dict(profile_block.data),
+        pages=pages,
+        settings=dict(layout.settings),
+    )
 __all__ = [
     "Block",
     "LayoutPlacement",

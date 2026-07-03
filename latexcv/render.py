@@ -10,7 +10,7 @@ import tempfile
 from typing import Any
 import warnings
 
-from jinja2 import Environment, FileSystemLoader, StrictUndefined
+from jinja2 import Environment, FileSystemLoader, PackageLoader, StrictUndefined
 import qrcode
 
 from .filters import register_filters
@@ -19,9 +19,22 @@ from .loader import load_blocks, load_render_document
 
 _DEFAULT_LANG = "de"
 _DEFAULT_DATA_DIR = "data"
-_DEFAULT_LAYOUT_DIR = "layout"
+_DEFAULT_LAYOUT_DIR: str | Path | None = None
 _DEFAULT_OUTPUT_DIR = "output"
 _DEFAULT_TEMPLATE = "cv.tex.j2"
+
+
+def _resolve_default_layout_dir() -> Path | None:
+    """Return repository layout dir when present, else use packaged templates."""
+
+    package_root = Path(__file__).resolve().parent
+    repo_layout_dir = package_root.parent / "layout"
+    if repo_layout_dir.is_dir():
+        return repo_layout_dir
+    packaged_layout_dir = package_root / "layout"
+    if packaged_layout_dir.is_dir():
+        return packaged_layout_dir
+    return None
 
 
 def _babel_language(lang: str) -> str:
@@ -50,6 +63,7 @@ def build_context(
         "contact": list(contact_block.items) if contact_block is not None and contact_block.items is not None else [],
         "lang": lang,
         "babel_language": _babel_language(lang),
+        "color_overrides": dict(document.settings.get("colors", {})),
         "qr_code_path": qr_code_path,
     }
 
@@ -138,8 +152,14 @@ def create_environment(
 ) -> Environment:
     """Create a configured Jinja environment with project filters."""
 
+    effective_layout_dir = _resolve_default_layout_dir() if layout_dir is None else Path(layout_dir)
+    if effective_layout_dir is None:
+        loader = PackageLoader("latexcv", "layout")
+    else:
+        loader = FileSystemLoader(str(effective_layout_dir))
+
     env = Environment(
-        loader=FileSystemLoader(str(layout_dir)),
+        loader=loader,
         undefined=StrictUndefined,
         trim_blocks=True,
         lstrip_blocks=True,
@@ -154,7 +174,7 @@ def create_environment(
 
 def render_tex(
     data_dir: str | Path = _DEFAULT_DATA_DIR,
-    layout_dir: str | Path = _DEFAULT_LAYOUT_DIR,
+    layout_dir: str | Path | None = _DEFAULT_LAYOUT_DIR,
     output_dir: str | Path = _DEFAULT_OUTPUT_DIR,
     lang: str = _DEFAULT_LANG,
     template_name: str = _DEFAULT_TEMPLATE,
@@ -227,9 +247,10 @@ def format_tex_file(
 
 def render_tex_file(
     data_dir: str | Path = _DEFAULT_DATA_DIR,
-    layout_dir: str | Path = _DEFAULT_LAYOUT_DIR,
+    layout_dir: str | Path | None = _DEFAULT_LAYOUT_DIR,
     output_dir: str | Path = _DEFAULT_OUTPUT_DIR,
     lang: str = _DEFAULT_LANG,
+    output_basename: str | None = None,
     template_name: str = _DEFAULT_TEMPLATE,
     format_output: bool = True,
     formatter_command: str = "latexindent",
@@ -247,7 +268,8 @@ def render_tex_file(
         template_name=template_name,
     )
 
-    rendered_file = output_path / f"cv_{lang}.tex"
+    target_stem = output_basename or f"cv_{lang}"
+    rendered_file = output_path / f"{target_stem}.tex"
     rendered_file.write_text(tex, encoding="utf-8")
 
     if format_output:

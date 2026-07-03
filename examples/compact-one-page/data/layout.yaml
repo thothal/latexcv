@@ -1,0 +1,34 @@
+layout:
+  version: 2
+  settings:
+    colors:
+      panel_background: "1F3A3D"
+      panel_foreground: "F4F8F7"
+      footer_background: "8FB9AF"
+      footer_foreground: "0E2224"
+      page_background: "FBFCFA"
+      page_foreground: "1B1B1B"
+      section_marker: "91A09B"
+      timeline_meta: "536560"
+      accent: "D98A29"
+
+  pages:
+    - id: page1
+      settings:
+        sidebar_side: right
+      regions:
+        header:
+          - block: profile
+            renderer: profile_header
+        body:
+          - block: experience
+            renderer: timeline
+        sidebar:
+          - block: contact
+            renderer: contact_list
+          - block: programming
+            renderer: rating_list
+          - block: platforms
+            renderer: comma_list
+          - block: languages
+            renderer: language_list

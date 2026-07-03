@@ -1,0 +1,49 @@
+experience:
+  kind: timeline
+
+  title:
+    de: Berufserfahrung
+    en: Work Experience
+
+  items:
+    - period:
+        start: 2022-01
+        end: present
+
+      organization: Example Analytics GmbH
+
+      title:
+        de: Senior Data Analyst
+        en: Senior Data Analyst
+
+      highlights:
+        de:
+          - Entwicklung und Monitoring von KPI-Dashboards fuer Fachbereiche
+          - Aufbau eines Reporting-Standards mit klaren Data-Definitions
+          - Automatisierung monatlicher Analysen mit Python und SQL
+
+        en:
+          - Built and maintained KPI dashboards for business stakeholders
+          - Established a reporting standard with clear data definitions
+          - Automated recurring monthly analyses with Python and SQL
+
+    - period:
+        start: 2019-03
+        end: 2021-12
+
+      organization: Demo Insights AG
+
+      title:
+        de: Data Analyst
+        en: Data Analyst
+
+      highlights:
+        de:
+          - Erstellung von Ad-hoc-Analysen fuer Vertrieb und Produktmanagement
+          - Pflege eines zentralen Data-Marts fuer Performance-Reports
+          - Zusammenarbeit mit Engineering zur Verbesserung der Datenqualitaet
+
+        en:
+          - Delivered ad hoc analyses for sales and product teams
+          - Maintained a central data mart for performance reporting
+          - Partnered with engineering to improve data quality

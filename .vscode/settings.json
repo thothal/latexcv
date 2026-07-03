@@ -29,17 +29,6 @@
    "python.defaultInterpreterPath": "C:/Users/tthaler/AppData/Local/r-miniconda/envs/cv-render/python.exe",
    "python.terminal.activateEnvironment": true,
    "python.condaPath": "C:/Users/tthaler/AppData/Local/r-miniconda/condabin/conda.bat",
-   "terminal.integrated.profiles.windows": {
-      "pwsh (cv-render)": {
-         "path": "pwsh",
-         "args": [
-            "-NoExit",
-            "-Command",
-            "conda activate cv-render"
-         ]
-      }
-   },
-   "terminal.integrated.defaultProfile.windows": "pwsh (cv-render)",
    "python-envs.defaultEnvManager": "ms-python.python:conda",
    "python-envs.defaultPackageManager": "ms-python.python:conda"
 }

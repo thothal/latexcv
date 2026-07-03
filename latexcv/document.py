@@ -47,6 +47,7 @@ class LayoutSpec:
 
     version: int
     pages: list[PageSpec]
+    settings: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -75,3 +76,4 @@ class RenderDocument:
     lang: str
     profile: dict[str, Any]
     pages: list[RenderPage]
+    settings: dict[str, Any] = field(default_factory=dict)

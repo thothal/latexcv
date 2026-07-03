@@ -1,0 +1,45 @@
+education:
+  kind: timeline
+
+  title:
+    de: Ausbildung
+    en: Education
+
+  items:
+    - period:
+        start: 2016
+        end: 2018
+
+      institution: University of Example
+
+      degree:
+        de: Master in Data Science
+        en: Master in Data Science
+
+      details:
+        de:
+          - Schwerpunkt Datenanalyse und Modellierung
+          - Abschluss mit Auszeichnung
+
+        en:
+          - Focus on analytics and applied modeling
+          - Graduated with distinction
+
+    - period:
+        start: 2012
+        end: 2016
+
+      institution: Example State University
+
+      degree:
+        de: Bachelor in Statistik
+        en: Bachelor in Statistics
+
+      details:
+        de:
+          - Nebenfach Informatik
+          - Praktikum im Bereich Business Analytics
+
+        en:
+          - Minor in Computer Science
+          - Internship in business analytics

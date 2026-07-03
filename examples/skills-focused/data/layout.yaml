@@ -1,0 +1,68 @@
+layout:
+  version: 2
+  settings:
+    colors:
+      panel_background: "0D1B2A"
+      panel_foreground: "FFFFFF"
+      footer_background: "D7E6F5"
+      footer_foreground: "0D1B2A"
+      page_background: "FFFFFF"
+      page_foreground: "101418"
+      section_marker: "95A3B3"
+      timeline_meta: "4C5D70"
+      accent: "FF6B35"
+
+  pages:
+    - id: page1
+      settings:
+        sidebar_side: left
+      regions:
+        header:
+          - block: profile
+            renderer: profile_header
+          - block: summary_quote
+            renderer: quote
+        body:
+          - block: education
+            renderer: timeline
+        sidebar:
+          - block: contact
+            renderer: contact_list
+          - block: platforms
+            renderer: comma_list
+          - block: statistics
+            renderer: comma_list
+          - block: soft_skills
+            renderer: icon_text_list
+          - block: languages
+            renderer: language_list
+
+    - id: page2
+      settings:
+        sidebar_side: right
+      regions:
+        body:
+          - block: experience
+            renderer: timeline
+        sidebar:
+          - block: awards
+            renderer: icon_text_list
+            items:
+              order:
+                - data_story_award
+                - analytics_case_prize
+          - block: trainings
+            renderer: icon_text_list
+            items:
+              include:
+                - cloud_data_foundations
+                - product_analytics_bootcamp
+          - block: interests
+            renderer: icon_grid
+            items:
+              order:
+                - photography
+                - chess
+                - hiking
+          - block: website_qr
+            renderer: qr_asset

@@ -11,7 +11,7 @@ quote_path <- function(path) {
 }
 
 find_cv_command <- function(python = NULL) {
-   command <- Sys.which("cv-render")
+   command <- Sys.which("cvrender")
    if (nzchar(command)) {
       return(list(command = command, module = NULL))
    }
@@ -30,14 +30,14 @@ find_cv_command <- function(python = NULL) {
       python <- Sys.which("python")
    }
    if (!nzchar(python)) {
-      stop("Could not find either 'cv-render' or a usable Python executable.", call. = FALSE)
+      stop("Could not find either 'cvrender' or a usable Python executable.", call. = FALSE)
    }
 
    list(command = python, module = "latexcv.cli")
 }
 
 render_cv <- function(
-    profile = "sample-cv",
+   profile = "full-showcase",
     repo_root = getwd(),
     lang = c("de", "en"),
     data_dir = NULL,

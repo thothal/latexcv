@@ -1,5 +1,16 @@
 layout:
   version: 2
+  settings:
+    colors:
+      panel_background: "3A4958"
+      panel_foreground: "FFFFFF"
+      footer_background: "BAC7CE"
+      footer_foreground: "FFFFFF"
+      page_background: "FFFFFF"
+      page_foreground: "000000"
+      section_marker: "B5BBBD"
+      timeline_meta: "869092"
+      accent: "F9A620"
 
   pages:
     - id: page1
