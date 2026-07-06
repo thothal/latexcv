@@ -1,31 +1,4 @@
 {
-   "latex-workshop.formatting.latex": "latexindent",
-   "latex-workshop.latex.tools": [
-      {
-         "name": "latexmk (cv)",
-         "command": "latexmk",
-         "args": [
-            "-synctex=1",
-            "-interaction=nonstopmode",
-            "-file-line-error",
-            "-pdf",
-            "-outdir=%OUTDIR%",
-            "%DOC%"
-         ],
-         "env": {
-            "TEXINPUTS": "${workspaceFolder}/layout/classes//;"
-         }
-      }
-   ],
-   "latex-workshop.latex.recipes": [
-      {
-         "name": "latexmk (cv)",
-         "tools": [
-            "latexmk (cv)"
-         ]
-      }
-   ],
-   "latex-workshop.latex.recipe.default": "first",
    "python.terminal.activateEnvironment": true,
    "python.envFile": "${workspaceFolder}/.env",
    "python.analysis.autoSearchPaths": true,
