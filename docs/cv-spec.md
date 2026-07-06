@@ -11,6 +11,8 @@ This schema separates content storage from document composition.
 
 This repository uses this schema as the supported content format.
 
+For developer implementation details (validation internals, renderer extension workflow, and test strategy), see [developer-validation-renderers-tests.md](developer-validation-renderers-tests.md).
+
 ## Core Concepts
 
 ### Block

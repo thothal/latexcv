@@ -115,6 +115,7 @@ The renderer uses a block-and-layout content model:
 - Python validates schema and renderer compatibility before Jinja rendering
 
 See [docs/cv-spec.md](docs/cv-spec.md) for details.
+For implementation and extension guidance, see [docs/developer-validation-renderers-tests.md](docs/developer-validation-renderers-tests.md).
 
 ## Troubleshooting
 
