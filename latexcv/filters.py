@@ -139,24 +139,55 @@ def period(entry: dict[str, Any], lang: str = "de") -> str:
 def location(profile: dict[str, Any], lang: str = "de") -> str:
     """Build location text like ``Sample City, Germany``."""
 
-    city = profile["address"]["city"]
-    country = profile["address"]["country"][lang]
-    return f"{city}, {country}"
+    address = profile.get("address", {})
+    if not isinstance(address, dict):
+        return ""
+
+    city = address.get("city") if isinstance(address.get("city"), str) else ""
+    country_map = address.get("country")
+    country = ""
+    if isinstance(country_map, dict):
+        if lang in country_map and isinstance(country_map[lang], str):
+            country = country_map[lang]
+        elif "de" in country_map and isinstance(country_map["de"], str):
+            country = country_map["de"]
+        elif "en" in country_map and isinstance(country_map["en"], str):
+            country = country_map["en"]
+
+    parts = [part for part in [city, country] if part]
+    return ", ".join(parts)
 
 
 def full_name(profile: dict[str, Any]) -> str:
     """Build full name text like ``Alex Example``."""
 
-    first = profile["name"]["first"]
-    last = profile["name"]["last"]
-    return f"{first} {last}"
+    name = profile.get("name", {})
+    if not isinstance(name, dict):
+        return ""
+    first = name.get("first", "")
+    last = name.get("last", "")
+    return f"{first} {last}".strip()
 
 
 def postal_city(profile: dict[str, Any]) -> str:
     """Build postal-city text like ``10001 Sample City``."""
 
-    address = profile["address"]
-    return f"{address['postal_code']} {address['city']}"
+    address = profile.get("address", {})
+    if not isinstance(address, dict):
+        return ""
+    postal_code = address.get("postal_code", "")
+    city = address.get("city", "")
+    return f"{postal_code} {city}".strip()
+
+
+def street(profile: dict[str, Any]) -> str:
+    """Return street line when present, otherwise empty string."""
+
+    address = profile.get("address", {})
+    if not isinstance(address, dict):
+        return ""
+    raw_street = address.get("street")
+    return raw_street if isinstance(raw_street, str) else ""
 
 
 # ============================================================================
@@ -176,6 +207,7 @@ def register_filters(env: Any, lang: str = "de") -> Any:
     env.filters["location"] = location
     env.filters["full_name"] = full_name
     env.filters["postal_city"] = postal_city
+    env.filters["street"] = street
     env.filters["period"] = period
     return env
 
@@ -192,5 +224,6 @@ __all__ = [
     "location",
     "full_name",
     "postal_city",
+    "street",
     "register_filters",
 ]

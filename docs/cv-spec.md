@@ -231,9 +231,14 @@ Color values must be quoted 6-digit HEX strings (for example `"3A4958"`). If omi
 Additional strict checks in this repository:
 
 - Blocks reject unknown top-level keys.
-- Profile blocks validate required name and address fields.
+- Profile blocks require `name.first` and `name.last`; address fields are optional.
 - Timeline and list blocks validate item mappings and required period fields.
 - Renderer-specific item fields are validated early (e.g., `rating_list` requires `skill`, `icon`, `level`).
+
+Contact renderer minimum:
+
+- `contact_list` requires only `type` and `icon` per item.
+- Type-specific fields are optional, but when link fields are provided they must include both `label` and `url`.
 
 Compatibility examples:
 

@@ -236,14 +236,24 @@ def _validate_block(block: Block) -> None:
         address = block.data.get("address")
         if not isinstance(name, dict):
             raise LayoutValidationError(f"Block '{block.id}' profile data must include a name mapping.")
-        if not isinstance(address, dict):
-            raise LayoutValidationError(f"Block '{block.id}' profile data must include an address mapping.")
         _validate_string_field(name, "first", context=f"Block '{block.id}' profile.name")
         _validate_string_field(name, "last", context=f"Block '{block.id}' profile.name")
-        _validate_string_field(address, "street", context=f"Block '{block.id}' profile.address")
-        _validate_text_or_number_field(address, "postal_code", context=f"Block '{block.id}' profile.address")
-        _validate_string_field(address, "city", context=f"Block '{block.id}' profile.address")
-        _validate_localized_mapping(address.get("country"), context=f"Block '{block.id}' profile.address.country")
+        # Address fields are optional. Validate only provided fields.
+        if address is not None:
+            if not isinstance(address, dict):
+                raise LayoutValidationError(f"Block '{block.id}' profile.address must be a mapping when provided.")
+            if "street" in address and (not isinstance(address.get("street"), str) or not address.get("street").strip()):
+                raise LayoutValidationError(f"Block '{block.id}' profile.address.street must be a non-empty string when provided.")
+            if "postal_code" in address:
+                postal_code = address.get("postal_code")
+                if not (isinstance(postal_code, str) and postal_code.strip()) and not isinstance(postal_code, int | float):
+                    raise LayoutValidationError(
+                        f"Block '{block.id}' profile.address.postal_code must be a non-empty string or numeric value when provided."
+                    )
+            if "city" in address and (not isinstance(address.get("city"), str) or not address.get("city").strip()):
+                raise LayoutValidationError(f"Block '{block.id}' profile.address.city must be a non-empty string when provided.")
+            if "country" in address and address.get("country") is not None:
+                _validate_localized_mapping(address.get("country"), context=f"Block '{block.id}' profile.address.country")
         return
 
     if block.kind == "quote":
@@ -657,11 +667,19 @@ def _validate_renderer_shape(block: Block, placement: LayoutPlacement) -> None:
                     f"Block '{block.id}' item {index} has unsupported contact type '{contact_type}'."
                 )
             _validate_string_field(item, "icon", context=f"Block '{block.id}' item {index}")
-            if contact_type in {"phone", "email"}:
+            # Keep contact payload flexible: validate optional fields only when provided.
+            if contact_type in {"phone", "email"} and "value" in item:
                 _validate_string_field(item, "value", context=f"Block '{block.id}' item {index}")
             if contact_type in {"website", "linkedin", "github", "stackoverflow"}:
-                _validate_string_field(item, "label", context=f"Block '{block.id}' item {index}")
-                _validate_string_field(item, "url", context=f"Block '{block.id}' item {index}")
+                has_label = "label" in item
+                has_url = "url" in item
+                if has_label ^ has_url:
+                    raise LayoutValidationError(
+                        f"Block '{block.id}' item {index} must provide both label and url together when one is present."
+                    )
+                if has_label:
+                    _validate_string_field(item, "label", context=f"Block '{block.id}' item {index}")
+                    _validate_string_field(item, "url", context=f"Block '{block.id}' item {index}")
     elif placement.renderer == "comma_list":
         for index, item in enumerate(items, start=1):
             label = item.get("label")

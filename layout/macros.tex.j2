@@ -28,7 +28,7 @@
    ========================================================================== #}
 
 {% macro footer(profile) -%}
-\cvfooter{ {{- profile | full_name | tex -}} }{ {{- profile.address.street | tex -}} }{ {{- profile | postal_city | tex -}} }
+\cvfooter{ {{- profile | full_name | tex -}} }{ {{- profile | street | tex -}} }{ {{- profile | postal_city | tex -}} }
 {%- endmacro %}
 
 
@@ -54,11 +54,15 @@
 {% macro contact_block(contact, profile, lang) -%}
 {% for item in contact -%}
 {%- if item.type == "location" -%}
-{{ icon_text(item.icon, profile.address.city ~ ", " ~ profile.address.country[lang]) }}\\
+{{ icon_text(item.icon, profile | location(lang)) }}\\
 {%- elif item.type == "phone" -%}
+{% if item.value is defined and item.value %}
 {{ icon_text(item.icon, item.value) }}\\
+{% endif %}
 {%- elif item.type == "email" -%}
+{% if item.value is defined and item.value %}
 {{ icon_email(item.icon, item.value, item.value) }}\\
+{% endif %}
 {%- elif item.type in ["website", "linkedin", "github", "stackoverflow"] and item.icon is defined and item.label is defined and item.url is defined -%}
 {{ icon_link(item.icon, item.label, item.url) }}{% if item.type == "linkedin" %}\\{% endif %}
 {%- endif -%}
