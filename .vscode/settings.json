@@ -13,7 +13,7 @@
             "%DOC%"
          ],
          "env": {
-            "TEXINPUTS": "C:/Users/tthaler/Documents/2. Work/CV/layout/classes//;"
+            "TEXINPUTS": "${workspaceFolder}/layout/classes//;"
          }
       }
    ],
@@ -26,9 +26,15 @@
       }
    ],
    "latex-workshop.latex.recipe.default": "first",
-   "python.defaultInterpreterPath": "C:/Users/tthaler/AppData/Local/r-miniconda/envs/cv-render/python.exe",
    "python.terminal.activateEnvironment": true,
-   "python.condaPath": "C:/Users/tthaler/AppData/Local/r-miniconda/condabin/conda.bat",
-   "python-envs.defaultEnvManager": "ms-python.python:conda",
-   "python-envs.defaultPackageManager": "ms-python.python:conda"
+   "python.envFile": "${workspaceFolder}/.env",
+   "python.analysis.autoSearchPaths": true,
+   "python.analysis.useLibraryCodeForTypes": true,
+   "python-envs.pythonProjects": [
+      {
+         "path": ".",
+         "envManager": "ms-python.python:conda",
+         "packageManager": "ms-python.python:conda"
+      }
+   ]
 }
