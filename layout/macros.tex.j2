@@ -166,13 +166,14 @@
 {% elif unit.renderer == "icon_text_list" %}
    {% set items = unit.data["items"] if unit.data["items"] is defined else [] %}
    {% call optional_sidebar_section(unit.title) %}
-      {% for item in items %}
-         {% if item.label is defined %}
-            {{ icon_text(item.icon, item.label[lang]) }}{% if not loop.last %}\\{% endif %}
-         {% else %}
-            {{ icon_title(item, lang) }}{% if not loop.last %}\\{% endif %}
-         {% endif %}
-      {% endfor %}
+{% for item in items %}
+{% if item.label is defined %}
+{{ icon_text(item.icon, item.label[lang]) }}{% if not loop.last %}\\{% endif %}
+{% else %}
+{{ icon_title(item, lang) }}{% if not loop.last %}\\{% endif %}
+{% endif %}
+{{ '\n' -}}
+{% endfor %}
    {% endcall %}
 {% elif unit.renderer == "rating_list" %}
    {% set items = unit.data["items"] if unit.data["items"] is defined else [] %}

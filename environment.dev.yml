@@ -1,0 +1,13 @@
+name: cv-render-dev
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - jinja2
+  - pyyaml
+  - mistletoe
+  - qrcode
+  - pillow
+  - pip
+  - pytest
+  - ruff

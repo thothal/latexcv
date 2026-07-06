@@ -17,6 +17,15 @@ This repository is intentionally tool-focused and contains only sample data.
 - Conda (Miniconda/Anaconda)
 - A LaTeX distribution with `latexmk` available in PATH
 
+## Environment Strategy
+
+Use two conda environments:
+
+- Runtime: `cv-render` (used by consumer repositories/scripts)
+- Development: `cv-render-dev` (used while developing `latexcv` itself)
+
+Keep `base` clean and do not install this project there.
+
 ## Quick Start
 
 1. Clone the repository.
@@ -26,17 +35,17 @@ This repository is intentionally tool-focused and contains only sample data.
 latexmk -v
 ```
 
-3. Create and activate the conda environment:
+3. Create and activate the runtime environment:
 
 ```powershell
 conda env create -f environment.yml
 conda activate cv-render
 ```
 
-4. Install in editable mode:
+4. Install package in the runtime environment:
 
 ```powershell
-python -m pip install -e .
+python -m pip install .
 ```
 
 5. Render the sample profile:
@@ -46,7 +55,29 @@ cvrender examples/full-showcase/data --output-dir examples/full-showcase/output 
 cvrender examples/full-showcase/data --output-dir examples/full-showcase/output --lang de
 ```
 
-6. Render additional layout examples:
+## Development Setup
+
+1. Create and activate the development environment:
+
+```powershell
+conda env create -f environment.dev.yml
+conda activate cv-render-dev
+```
+
+2. Install in editable mode:
+
+```powershell
+python -m pip install -e .
+```
+
+3. Run quality checks:
+
+```powershell
+ruff check .
+pytest -q
+```
+
+4. Render additional layout examples:
 
 ```powershell
 cvrender examples/compact-one-page/data --output-dir examples/compact-one-page/output --lang en --tex-only
